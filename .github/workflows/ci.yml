@@ -44,7 +44,7 @@ jobs:
 
     - name: Run migrations
       run: |
-        make migratedown
+        make migratedown -y
         make migrateup
 
     - name: Run Unit Tests
