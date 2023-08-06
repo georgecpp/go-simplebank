@@ -43,10 +43,7 @@ jobs:
         which migrate
 
     - name: Run migrations
-      run: |
-        make migratedown
-        y
-        make migrateup
+      run: make migrateup
 
     - name: Run Unit Tests
       run: make test
