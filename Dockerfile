@@ -8,6 +8,10 @@ RUN go build -o main main.go
 FROM alpine
 WORKDIR /app
 COPY --from=builder /app/main .
+COPY app.env .
 
 EXPOSE 8080
 CMD ["/app/main"]
+
+# BLANAO RUN 2 Independent containers on same network
+# docker run --name simplebank --network bank-network -p 8080:8080 -e GIN_MODE=release -e DB_SOURCE="postgresql://root:secret@postgres15:5432/simple_bank?sslmode=disable" simplebank:latest
