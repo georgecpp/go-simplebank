@@ -3,15 +3,22 @@ FROM golang:1.20.7-alpine AS builder
 WORKDIR /app
 COPY . .
 RUN go build -o main main.go
+RUN apk add curl
+RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.16.2/migrate.linux-amd64.tar.gz | tar xvz
 
 # Run stage
 FROM alpine
 WORKDIR /app
 COPY --from=builder /app/main .
+COPY --from=builder /app/migrate ./migrate
 COPY app.env .
+COPY start.sh .
+COPY wait-for.sh .
+COPY db/migration ./migration
 
 EXPOSE 8080
 CMD ["/app/main"]
+ENTRYPOINT [ "/app/start.sh" ]
 
 # BLANAO RUN 2 Independent containers on same network
 # docker run --name simplebank --network bank-network -p 8080:8080 -e GIN_MODE=release -e DB_SOURCE="postgresql://root:secret@postgres15:5432/simple_bank?sslmode=disable" simplebank:latest
