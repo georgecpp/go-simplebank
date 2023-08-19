@@ -5,7 +5,6 @@ import (
 	"log"
 	"net"
 
-	"github.com/georgecpp/go-simplebank/api"
 	db "github.com/georgecpp/go-simplebank/db/sqlc"
 	"github.com/georgecpp/go-simplebank/gapi"
 	"github.com/georgecpp/go-simplebank/pb"
@@ -30,17 +29,17 @@ func main() {
 	runGrpcServer(config, store)
 }
 
-func runGinServer(config util.Config, store db.Store) {
-	server, err := api.NewServer(config, store)
-	if err != nil {
-		log.Fatal("cannot create server:", err)
-	}
+// func runGinServer(config util.Config, store db.Store) {
+// 	server, err := api.NewServer(config, store)
+// 	if err != nil {
+// 		log.Fatal("cannot create server:", err)
+// 	}
 
-	err = server.Start(config.HTTPServerAddress)
-	if err != nil {
-		log.Fatal("cannot start server:", err)
-	}
-}
+// 	err = server.Start(config.HTTPServerAddress)
+// 	if err != nil {
+// 		log.Fatal("cannot start server:", err)
+// 	}
+// }
 
 func runGrpcServer(config util.Config, store db.Store) {
 	server, err := gapi.NewServer(config, store)
