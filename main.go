@@ -10,7 +10,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"github.com/georgecpp/go-simplebank/api"
+	// "github.com/georgecpp/go-simplebank/api"
 	db "github.com/georgecpp/go-simplebank/db/sqlc"
 	_ "github.com/georgecpp/go-simplebank/docs/statik"
 	"github.com/georgecpp/go-simplebank/gapi"
@@ -127,20 +127,21 @@ func runGatewayServer(config util.Config, store db.Store) {
 	}
 
 	log.Info().Msgf("start HTTP gateway server at %s", listener.Addr().String())
-	err = http.Serve(listener, mux)
+	handler := gapi.HttpLogger(mux)
+	err = http.Serve(listener, handler)
 	if err != nil {
 		log.Fatal().Err(err).Msg("cannot start HTTP gateway server")
 	}
 }
 
-func runGinServer(config util.Config, store db.Store) {
-	server, err := api.NewServer(config, store)
-	if err != nil {
-		log.Fatal().Err(err).Msg("cannot create server")
-	}
+// func runGinServer(config util.Config, store db.Store) {
+// 	server, err := api.NewServer(config, store)
+// 	if err != nil {
+// 		log.Fatal().Err(err).Msg("cannot create server")
+// 	}
 
-	err = server.Start(config.HTTPServerAddress)
-	if err != nil {
-		log.Fatal().Err(err).Msg("cannot start server")
-	}
-}
+// 	err = server.Start(config.HTTPServerAddress)
+// 	if err != nil {
+// 		log.Fatal().Err(err).Msg("cannot start server")
+// 	}
+// }
